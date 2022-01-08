@@ -5,6 +5,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.servlet.http.HttpSession;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -37,6 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     httpServletResponse.sendRedirect("/login"); // 실패 후 이동 페이지
                 })
                 .permitAll() //loginPage 에 접근하는 사용자는 인증 없이 접근이 가능하도록 함
+        ;
+
+        http
+                .logout()                                       // 로그아웃 처리
+                .logoutUrl("/logout")                           // 로그아웃 처리 URL
+                .logoutSuccessUrl("/login")                     // 로그아웃 성공 후 이동페이지
+                .deleteCookies("JESSONID", "remember-me")       // 로그아웃 후 쿠키 삭제
+                .addLogoutHandler((httpServletRequest, httpServletResponse, authentication) -> { //로그아웃 핸들러
+                    HttpSession httpSession = httpServletRequest.getSession();
+                    httpSession.invalidate(); // 세션 무효화
+                })
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> { // 로그아웃 성공 후 핸들러
+                    httpServletResponse.sendRedirect("/login"); // 로그아웃 후 이동페이지
+                })
         ;
     }
 }
