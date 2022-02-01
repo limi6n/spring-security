@@ -22,14 +22,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 암호화 된 패스워드를 제공
         String password = passwordEncoder().encode("1111");
 
-
         auth.inMemoryAuthentication().withUser("user").password(password).roles("USER");
         auth.inMemoryAuthentication().withUser("manager").password(password).roles("MANAGER", "USER");
         auth.inMemoryAuthentication().withUser("admin").password(password).roles("ADMIN", "USER", "MANAGER");
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
