@@ -1,9 +1,11 @@
 package io.security.basicsecurity.security.provider;
 
+import io.security.basicsecurity.security.common.FormWebAuthenticationDetails;
 import io.security.basicsecurity.security.service.AccountContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,6 +33,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // 비밀번호 검증
         if(!passwordEncoder.matches(password, accountContext.getPassword())) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // secret_key 검증
+        FormWebAuthenticationDetails formWebAuthenticationDetails = (FormWebAuthenticationDetails) authentication.getDetails();
+        String secretKey = formWebAuthenticationDetails.getSecretKey();
+        if(secretKey == null || "secret".equals(secretKey)) {
+            throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
         }
 
         // 인증 후 권한정보, 인증성공한 사용자객체를 넘겨준다.

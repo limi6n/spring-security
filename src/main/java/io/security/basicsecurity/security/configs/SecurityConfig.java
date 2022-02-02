@@ -1,6 +1,8 @@
 package io.security.basicsecurity.security.configs;
 
+import io.security.basicsecurity.security.common.FormAuthenticationDetailsSource;
 import io.security.basicsecurity.security.provider.CustomAuthenticationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private FormAuthenticationDetailsSource authenticationDetailsSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
+                .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/")
                 .permitAll();
         ;
