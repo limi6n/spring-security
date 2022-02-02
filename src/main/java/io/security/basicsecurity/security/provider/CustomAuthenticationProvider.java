@@ -38,8 +38,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // secret_key 검증
         FormWebAuthenticationDetails formWebAuthenticationDetails = (FormWebAuthenticationDetails) authentication.getDetails();
         String secretKey = formWebAuthenticationDetails.getSecretKey();
-        if(secretKey == null || "secret".equals(secretKey)) {
-            throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
+        if (secretKey == null || !secretKey.equals("secret")) {
+            throw new IllegalArgumentException("Invalid Secret");
         }
 
         // 인증 후 권한정보, 인증성공한 사용자객체를 넘겨준다.
