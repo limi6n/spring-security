@@ -32,14 +32,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // 비밀번호 검증
         if(!passwordEncoder.matches(password, accountContext.getPassword())) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+            throw new BadCredentialsException("BadCredentialsException");
         }
 
         // secret_key 검증
         FormWebAuthenticationDetails formWebAuthenticationDetails = (FormWebAuthenticationDetails) authentication.getDetails();
         String secretKey = formWebAuthenticationDetails.getSecretKey();
         if (secretKey == null || !secretKey.equals("secret")) {
-            throw new IllegalArgumentException("Invalid Secret");
+            throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
         }
 
         // 인증 후 권한정보, 인증성공한 사용자객체를 넘겨준다.
