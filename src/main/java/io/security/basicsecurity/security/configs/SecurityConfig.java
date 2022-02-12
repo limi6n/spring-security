@@ -1,13 +1,14 @@
 package io.security.basicsecurity.security.configs;
 
 import io.security.basicsecurity.security.common.FormAuthenticationDetailsSource;
-import io.security.basicsecurity.security.filter.AjaxLoginProcessingFilter;
-import io.security.basicsecurity.security.handler.CustomAccessDeniedHandler;
-import io.security.basicsecurity.security.provider.CustomAuthenticationProvider;
+import io.security.basicsecurity.security.handler.FormAccessDeniedHandler;
+import io.security.basicsecurity.security.provider.FormAuthenticationProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,10 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
+@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -57,8 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/denied")
                 .accessDeniedHandler(accessDeniedHandler())
-        .and()
-                .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+
         ;
     }
 
@@ -79,8 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        // 구현한 CustomAuthenticationProvider 연결
-        return new CustomAuthenticationProvider();
+        // 구현한 FormAuthenticationProvider 연결
+        return new FormAuthenticationProvider(passwordEncoder());
     }
 
     @Bean
@@ -91,16 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        FormAccessDeniedHandler accessDeniedHandler = new FormAccessDeniedHandler();
         accessDeniedHandler.setErrorPage("/denied");
         return accessDeniedHandler;
-    }
-
-    @Bean
-    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
-        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
-        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
-        return ajaxLoginProcessingFilter;
     }
 
 }
