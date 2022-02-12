@@ -1,6 +1,7 @@
 package io.security.basicsecurity.security.handler;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class FormAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         // 인증 검증 실패에 관한 예외들
@@ -22,6 +23,8 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             errorMessage = "Invalid Username or Password";
         } else if (exception instanceof InsufficientAuthenticationException) {
             errorMessage = "Invalid Secret Key";
+        } else if (exception instanceof CredentialsExpiredException) {
+            errorMessage = "Expired password";
         }
 
         setDefaultFailureUrl("/login?error=true&exception=" + errorMessage);
