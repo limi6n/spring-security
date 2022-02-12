@@ -3,4 +3,4 @@
 
 - 지식공유자 : 정수원
 - 인프런 강의 url : https://bit.ly/3JKZm4u
-- 정리글 : https://www.notion.so/Spring-Security-feat-Spring-Boot-eff4f370b6e743ff99b1d1af455f8922
+- 정리글 : https://a-nyelimi.notion.site/Spring-Security-Spring-Boot-eff4f370b6e743ff99b1d1af455f8922
