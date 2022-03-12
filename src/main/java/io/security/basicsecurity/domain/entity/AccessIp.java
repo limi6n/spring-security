@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessIp implements Serializable {
+public class AccessIp implements Serializable { 
 
     @Id
     @GeneratedValue

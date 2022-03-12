@@ -6,6 +6,7 @@ import io.security.basicsecurity.security.filter.PermitAllFilter;
 import io.security.basicsecurity.security.handler.FormAccessDeniedHandler;
 import io.security.basicsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import io.security.basicsecurity.security.provider.FormAuthenticationProvider;
+import io.security.basicsecurity.security.voter.IpAddressVoter;
 import io.security.basicsecurity.service.SecurityResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,9 +136,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
 
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
-        accessDecisionVoters.add(roleVoter());
+        accessDecisionVoters.add(new IpAddressVoter(securityResourceService)); // 허용 ip 여부 심사(가장먼저 있어야함)
+        accessDecisionVoters.add(roleVoter()); // 설정한 권한 포맷팅 넣기
 
-        return Arrays.asList(new RoleVoter());
+        return accessDecisionVoters;
     }
 
     @Bean
