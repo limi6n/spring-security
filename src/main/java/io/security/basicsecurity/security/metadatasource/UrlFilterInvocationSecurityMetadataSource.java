@@ -13,14 +13,13 @@ import java.util.*;
 @Slf4j
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
+    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap;
 
     private SecurityResourceService securityResourceService;
 
-//    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap, SecurityResourceService securityResourceService) {
-//        this.requestMap = resourcesMap;
-//        this.securityResourceService = securityResourceService;
-//    }
+    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap) {
+        this.requestMap = resourcesMap;
+    }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
