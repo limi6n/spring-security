@@ -17,8 +17,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     private SecurityResourceService securityResourceService;
 
-    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap) {
+    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap, SecurityResourceService securityResourceService) {
         this.requestMap = resourcesMap;
+        this.securityResourceService = securityResourceService;
     }
 
     @Override
@@ -59,10 +60,11 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     public void reload(){
 
+        // 인가처리 실시간 반영하기
         LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securityResourceService.getResourceList();
         Iterator<Map.Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
 
-        requestMap.clear();
+        requestMap.clear(); // 기존 정보 지우기
 
         while(iterator.hasNext()){
             Map.Entry<RequestMatcher, List<ConfigAttribute>> entry = iterator.next();
