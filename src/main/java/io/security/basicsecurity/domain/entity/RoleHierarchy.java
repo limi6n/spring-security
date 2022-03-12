@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-public class RoleHierarchy implements Serializable {
+public class RoleHierarchy implements Serializable { 
 
     @Id
     @GeneratedValue

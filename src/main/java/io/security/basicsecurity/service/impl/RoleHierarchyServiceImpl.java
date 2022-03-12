@@ -22,6 +22,7 @@ public class RoleHierarchyServiceImpl implements RoleHierarchyService {
 
         List<RoleHierarchy> rolesHierarchy = roleHierarchyRepository.findAll();
 
+        // 권한 포맷팅
         Iterator<RoleHierarchy> itr = rolesHierarchy.iterator();
         StringBuilder concatedRoles = new StringBuilder();
         while (itr.hasNext()) {
