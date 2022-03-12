@@ -13,21 +13,23 @@ import java.util.*;
 @Slf4j
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap ;
+    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 
     private SecurityResourceService securityResourceService;
 
-    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap, SecurityResourceService securityResourceService) {
-        this.requestMap = resourcesMap;
-        this.securityResourceService = securityResourceService;
-    }
+//    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourcesMap, SecurityResourceService securityResourceService) {
+//        this.requestMap = resourcesMap;
+//        this.securityResourceService = securityResourceService;
+//    }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 
+        // 현재 사용자의 요청 객체 얻기
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
 
         if(requestMap != null){
+            // 사용자 정보와 매칭 되는 권한정보를 가져옴
             for(Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()){
                 RequestMatcher matcher = entry.getKey();
                 if(matcher.matches(request)){
